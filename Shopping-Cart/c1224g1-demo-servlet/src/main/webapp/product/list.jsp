@@ -92,7 +92,7 @@
         }
 
         .product {
-            background-color: aqua;
+            background-color: #dddddd;
             width: 200px;
             height: 200px;
             margin: 20px;
@@ -118,6 +118,7 @@
             <p><c:out value="${p.getName()}"/></p>
             <p><c:out value="${p.getPrice()}"/></p>
             <a href="/products?action=edit&id=${p.getId()}">Edit</a>
+            <a href="/carts?action=add&id=${p.getId()}">Add To Cart</a>
         </div>
     </c:forEach>
 </div>

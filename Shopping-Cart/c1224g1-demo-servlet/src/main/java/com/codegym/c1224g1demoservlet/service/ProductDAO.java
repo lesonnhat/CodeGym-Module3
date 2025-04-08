@@ -118,13 +118,15 @@ public class ProductDAO implements IDAO<Product> {
 
     @Override
     public boolean update(Product product) throws SQLException {
-        boolean rowUpdated;
+        boolean rowUpdated = false;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUCT_SQL);) {
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setInt(3, product.getId());
             rowUpdated = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            printSQLException(e);
         }
         return rowUpdated;
     }
