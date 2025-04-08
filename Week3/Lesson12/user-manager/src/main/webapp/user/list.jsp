@@ -22,7 +22,6 @@
             <th>Country</th>
             <th>Actions</th>
         </tr>
-        <jsp:useBean id="listUser" scope="request" type="java.util.List"/>
         <c:forEach var="user" items="${listUser}">
             <tr>
                 <td><c:out value="${user.id}"/></td>
