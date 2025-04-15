@@ -12,7 +12,7 @@
 <div class="container mt-5">
   <h2>Danh Sách Sách</h2>
 
-  <a href="SachDangMuon" class="btn btn-primary">Xem Sách Đang Mượn</a>
+  <a href="SachDangMuon" class="btn btn-secondary mb-3">Xem Sách Đang Mượn</a>
 
   <%
     String errorMessage = (String) request.getAttribute("errorMessage");
