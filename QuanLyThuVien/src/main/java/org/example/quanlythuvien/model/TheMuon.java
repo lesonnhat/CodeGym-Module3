@@ -6,7 +6,7 @@ public class TheMuon {
     private String maMuonSach;
     private String maSach;
     private String maHocSinh;
-    private boolean trangThai; // true: đang mượn, false: đã trả
+    private boolean trangThai; // Giữ kiểu boolean
     private Date ngayMuon;
     private Date ngayTra;
 

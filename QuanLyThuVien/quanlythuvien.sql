@@ -37,3 +37,4 @@ VALUES ('HS-001', 'Nguyễn Văn A', '10A1'),
 
 SELECT * FROM Sach;
 SELECT * FROM HocSinh;
+SELECT * FROM TheMuon;

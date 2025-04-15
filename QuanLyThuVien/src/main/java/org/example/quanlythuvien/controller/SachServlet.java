@@ -29,7 +29,6 @@ public class SachServlet extends HttpServlet {
                 System.out.println("Đã lấy được " + danhSachSach.size() + " sách từ cơ sở dữ liệu.");
             }
             request.setAttribute("danhSachSach", danhSachSach);
-
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

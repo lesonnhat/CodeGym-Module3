@@ -22,7 +22,7 @@ public class MuonDAO implements IDAO<TheMuon> {
                         rs.getString("maMuonSach"),
                         rs.getString("maSach"),
                         rs.getString("maHocSinh"),
-                        rs.getBoolean("trangThai"),
+                        rs.getInt("trangThai") == 1, // Chuyển TINYINT thành boolean
                         rs.getDate("ngayMuon"),
                         rs.getDate("ngayTra")
                 );
@@ -30,6 +30,7 @@ public class MuonDAO implements IDAO<TheMuon> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Lỗi khi lấy danh sách thẻ mượn: " + e.getMessage());
         }
         return danhSachMuon;
     }
@@ -46,7 +47,7 @@ public class MuonDAO implements IDAO<TheMuon> {
                             rs.getString("maMuonSach"),
                             rs.getString("maSach"),
                             rs.getString("maHocSinh"),
-                            rs.getBoolean("trangThai"),
+                            rs.getInt("trangThai") == 1, // Chuyển TINYINT thành boolean
                             rs.getDate("ngayMuon"),
                             rs.getDate("ngayTra")
                     );
@@ -54,6 +55,7 @@ public class MuonDAO implements IDAO<TheMuon> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Lỗi khi lấy thẻ mượn: " + e.getMessage());
         }
         return null;
     }
@@ -66,12 +68,14 @@ public class MuonDAO implements IDAO<TheMuon> {
             stmt.setString(1, theMuon.getMaMuonSach());
             stmt.setString(2, theMuon.getMaSach());
             stmt.setString(3, theMuon.getMaHocSinh());
-            stmt.setBoolean(4, theMuon.isTrangThai());
+            stmt.setInt(4, theMuon.isTrangThai() ? 1 : 0); // Chuyển boolean thành TINYINT
             stmt.setDate(5, new java.sql.Date(theMuon.getNgayMuon().getTime()));
             stmt.setDate(6, new java.sql.Date(theMuon.getNgayTra().getTime()));
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Đã thêm " + rowsAffected + " bản ghi vào TheMuon");
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Lỗi khi thêm thẻ mượn: " + e.getMessage());
         }
     }
 
@@ -82,13 +86,14 @@ public class MuonDAO implements IDAO<TheMuon> {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, theMuon.getMaSach());
             stmt.setString(2, theMuon.getMaHocSinh());
-            stmt.setBoolean(3, theMuon.isTrangThai());
+            stmt.setInt(3, theMuon.isTrangThai() ? 1 : 0); // Chuyển boolean thành TINYINT
             stmt.setDate(4, new java.sql.Date(theMuon.getNgayMuon().getTime()));
             stmt.setDate(5, new java.sql.Date(theMuon.getNgayTra().getTime()));
             stmt.setString(6, theMuon.getMaMuonSach());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Lỗi khi cập nhật thẻ mượn: " + e.getMessage());
         }
     }
 
@@ -101,6 +106,45 @@ public class MuonDAO implements IDAO<TheMuon> {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Lỗi khi xóa thẻ mượn: " + e.getMessage());
+        }
+    }
+
+    public List<TheMuon> getAllMuon() {
+        List<TheMuon> danhSachMuon = new ArrayList<>();
+        String sql = "SELECT * FROM TheMuon WHERE trangThai = 1"; // So sánh trực tiếp với 1
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                TheMuon theMuon = new TheMuon(
+                        rs.getString("maMuonSach"),
+                        rs.getString("maSach"),
+                        rs.getString("maHocSinh"),
+                        rs.getInt("trangThai") == 1, // Chuyển TINYINT thành boolean
+                        rs.getDate("ngayMuon"),
+                        rs.getDate("ngayTra")
+                );
+                danhSachMuon.add(theMuon);
+            }
+            System.out.println("Số lượng sách đang mượn: " + danhSachMuon.size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi lấy danh sách sách đang mượn: " + e.getMessage());
+        }
+        return danhSachMuon;
+    }
+
+    public void updateStatus(String maMuonSach, String status) {
+        String sql = "UPDATE TheMuon SET trangThai = ? WHERE maMuonSach = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, "daTra".equals(status) ? 0 : 1); // Chuyển status thành TINYINT
+            stmt.setString(2, maMuonSach);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi cập nhật trạng thái thẻ mượn: " + e.getMessage());
         }
     }
 }

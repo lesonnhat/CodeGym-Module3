@@ -63,11 +63,11 @@ public class MuonSachServlet extends HttpServlet {
 
             // Tạo bản ghi mượn sách
             TheMuon theMuon = new TheMuon(
-                    "M" + System.currentTimeMillis() % 1000000, // Đảm bảo độ dài không vượt quá 10 ký tự
+                    "M" + System.currentTimeMillis() % 1000000,
                     maSach,
                     maHocSinh,
-                    true,
-                    new Date(), // Ngày mượn là ngày hiện tại
+                    true, // Đặt trạng thái là đang mượn
+                    new Date(),
                     ngayTra
             );
             muonDAO.add(theMuon);

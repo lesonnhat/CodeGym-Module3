@@ -11,6 +11,9 @@
 <body>
 <div class="container mt-5">
   <h2>Danh Sách Sách</h2>
+
+  <a href="SachDangMuon" class="btn btn-primary">Xem Sách Đang Mượn</a>
+
   <%
     String errorMessage = (String) request.getAttribute("errorMessage");
     if (errorMessage != null) {
